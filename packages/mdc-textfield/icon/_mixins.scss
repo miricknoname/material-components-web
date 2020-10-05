@@ -127,8 +127,10 @@
   $feat-structure: feature-targeting.create-target($query, structure);
 
   @include feature-targeting.targets($feat-structure) {
+    padding: (variables.$size - variables.$icon-size) / 2;
+
     @include rtl-mixins.reflexive-property(
-      margin,
+      padding,
       variables.$leading-icon-padding-left,
       variables.$leading-icon-padding-right
     );
@@ -139,8 +141,10 @@
   $feat-structure: feature-targeting.create-target($query, structure);
 
   @include feature-targeting.targets($feat-structure) {
+    padding: (variables.$size - variables.$icon-size) / 2;
+
     @include rtl-mixins.reflexive-property(
-      margin,
+      padding,
       variables.$trailing-icon-padding-left,
       variables.$trailing-icon-padding-right
     );
