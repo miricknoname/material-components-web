@@ -98,6 +98,7 @@ export class MDCTextFieldFoundation extends MDCFoundation<MDCTextFieldAdapter> {
   private receivedUserInput_ = false;
   private isValid_ = true;
   private useNativeValidation_ = true;
+  private autovalidate_ = true;
 
   private readonly inputFocusHandler_: () => void;
   private readonly inputBlurHandler_: SpecificEventListener<'blur'>;
@@ -302,13 +303,17 @@ export class MDCTextFieldFoundation extends MDCFoundation<MDCTextFieldAdapter> {
       this.getNativeInput_().value = value;
     }
     this.setCharacterCounter_(value.length);
-    const isValid = this.isValid();
-    this.styleValidity_(isValid);
+    if (this.autovalidate_) {
+      const isValid = this.isValid();
+      this.styleValidity_(isValid);
+    }
     if (this.adapter.hasLabel()) {
       this.notchOutline(this.shouldFloat);
       this.adapter.floatLabel(this.shouldFloat);
       this.styleFloating_(this.shouldFloat);
-      this.adapter.shakeLabel(this.shouldShake);
+      if (this.autovalidate_) {
+        this.adapter.shakeLabel(this.shouldShake);
+      }
     }
   }
 
@@ -331,6 +336,22 @@ export class MDCTextFieldFoundation extends MDCFoundation<MDCTextFieldAdapter> {
     if (this.adapter.hasLabel()) {
       this.adapter.shakeLabel(shouldShake);
     }
+  }
+
+  /**
+   * @param shouldAutovalidate Whether or not validity should be updated on
+   * value change.
+   */
+  setAutovalidate(shouldAutovalidate: boolean): void {
+    this.autovalidate_ = shouldAutovalidate;
+  }
+
+  /**
+   * @return Whether or not validity should be updated on value change. `true`
+   * by default.
+   */
+  getAutovalidate(): boolean {
+    return this.autovalidate_;
   }
 
   /**
