@@ -225,6 +225,33 @@ describe('MDCTextFieldFoundation', () => {
         .toHaveBeenCalledWith(cssClasses.LABEL_FLOATING);
   });
 
+  it('#setValue valid and invalid input without autovalidation', () => {
+    const {foundation, mockAdapter, nativeInput, helperText} = setupValueTest(
+        {value: '', optIsValid: false, hasLabel: true, useHelperText: true});
+
+    expect(foundation.getAutovalidate()).toBeTrue();
+    foundation.setAutovalidate(false);
+    expect(foundation.getAutovalidate()).toBeFalse();
+
+    foundation.setValue('invalid');
+    expect(mockAdapter.addClass).not.toHaveBeenCalledWith(cssClasses.INVALID);
+    expect(helperText.setValidity).not.toHaveBeenCalledWith(false);
+    expect(mockAdapter.shakeLabel).not.toHaveBeenCalledWith(true);
+    expect(mockAdapter.floatLabel).toHaveBeenCalledWith(true);
+    expect(mockAdapter.addClass)
+        .toHaveBeenCalledWith(cssClasses.LABEL_FLOATING);
+
+    nativeInput.validity.valid = true;
+    foundation.setValue('valid');
+    expect(mockAdapter.removeClass)
+        .not.toHaveBeenCalledWith(cssClasses.INVALID);
+    expect(helperText.setValidity).not.toHaveBeenCalledWith(true);
+    expect(mockAdapter.shakeLabel).not.toHaveBeenCalledWith(false);
+    expect(mockAdapter.floatLabel).toHaveBeenCalledWith(true);
+    expect(mockAdapter.addClass)
+        .toHaveBeenCalledWith(cssClasses.LABEL_FLOATING);
+  });
+
   it('#setValue with invalid status and empty value does not shake the label',
      () => {
        const {foundation, mockAdapter, helperText} = setupValueTest(
